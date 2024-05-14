@@ -1,6 +1,6 @@
 {
   "name": "@nasa-gcn/afm",
-  "version": "1.1.1",
+  "version": "0.1.0",
   "description": "Command-line tool to render Astro Flavored Markdown documents to JSON abstract syntax trees or HTML",
   "files": [
     "index.js"
