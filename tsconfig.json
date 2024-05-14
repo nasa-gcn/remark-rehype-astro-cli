@@ -2,8 +2,7 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "files": ["src/index.ts"],
   "compilerOptions": {
-    "declaration": true,
-    "outDir": ".",
-    "emitDeclarationOnly": true
+    "noEmit": true,
+    "outDir": "."
   }
 }

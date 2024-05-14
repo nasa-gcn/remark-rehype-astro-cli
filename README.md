@@ -1,86 +1,147 @@
-[![codecov](https://codecov.io/gh/nasa-gcn/remark-rehype-astro/branch/main/graph/badge.svg?token=3ID7X7XNNQ)](https://codecov.io/gh/nasa-gcn/remark-rehype-astro)
+# remark-rehype-astro-cli
 
-# remark-rehype-astro
+This is a command-line tool to render Astro Flavored Markdown documents to JSON abstract syntax trees or HTML. Astro Flavored Markdown is a dialect of [Markdown](https://www.markdownguide.org) for rapid astronomy communications. Astro Flavored Markdown detects and enriches dates, times, sky coordinates, and bibliographic references in text.
 
-This is the reference implementation of Astro Flavored Markdown, dialect of [Markdown](https://www.markdownguide.org) for rapid astronomy communications. Astro Flavored Markdown detects and enriches dates, times, sky coordinates, and bibliographic references in text.
+This command-line interface is a thin wrapper around [remark-rehype-astro](https://www.npmjs.com/package/@nasa-gcn/remark-rehype-astro), the reference implementation of Astro Flavored Markdown as a plugin for the [Unified](https://unifiedjs.com) parser ecosystem.
 
-The package is a plugin for the [Unified](https://unifiedjs.com) parser ecosystem. It can be used as _either_ a plugin for [Remark](https://github.com/remarkjs/remark) _or_ for [Rehype](https://github.com/rehypejs/rehype). Use it in Remark mode to output a symbolic representation of the Markdown content (for example, to extract data nodes from it). Use it in Rehype mode if you want to render Astro Flavored Mardkown as HTML (for example, for inclusion in a Web page).
+## Usage
 
-For supported syntax, see the [src/replacements](src/replacements) directory. In each directory there is a file called `test.md` illustrating the Markdown syntax, a file called `test.json` containing the resulting astract syntax tree, and a file called `test.html` showing how it is rendered in HTML.
+```
+Usage: remark-rehype-astro-cli [options] [input]
 
-## Remark mode
+Render Astro Flavored Markdown as a JSON syntax tree or as HTML
 
-When you use the plugin in Remark mode, it tags Astro Flavored Markdown nodes in the [mdast](https://github.com/syntax-tree/mdast) syntax tree by adding `data` attributes with `class` and `value` attributes indicating the kind of data and a normalized, computable value.
+Arguments:
+  input                  input file [default: stdin]
 
-Here is a basic pipeline for processing in Remark mode:
-
-```mjs
-import { remarkAstro } from '@nasa-gcn/remark-rehype-astro'
-import remarkParse from 'remark-parse'
-import { unified } from 'unified'
-
-const processor = unified().use(remarkParse).use(remarkAstro)
+Options:
+  --html                 output is in HTML [default: output is in JSON]
+  -o, --output <output>  output file [default: stdout]
+  -h, --help             display help for command
 ```
 
-The following Markdown text:
+## Example
 
-```md
-See GCN Circular 123
+Place the following text into a file called example.md:
+
+```
+# Example
+
+Here is a table:
+
+| Transient | Classification |
+| --------- | -------------- |
+| AT2017gfo | kilonova       |
 ```
 
-is represented by the following syntax tree:
+To render as a JSON syntax tree:
 
-```json
+```
+$ npx remark-rehype-astro-cli example.md
 {
   "type": "root",
   "children": [
     {
-      "type": "text",
-      "value": "See GCN Circular "
+      "type": "heading",
+      "depth": 1,
+      "children": [
+        {
+          "type": "text",
+          "value": "Example"
+        }
+      ]
     },
     {
-      "type": "text",
-      "value": "123",
-      "data": {
-        "class": "gcn-circular",
-        "value": 123
-      }
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "Here is a table:"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "align": [
+        null,
+        null
+      ],
+      "children": [
+        {
+          "type": "tableRow",
+          "children": [
+            {
+              "type": "tableCell",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Transient"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Classification"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "children": [
+            {
+              "type": "tableCell",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "AT2017gfo",
+                  "data": {
+                    "class": "tns",
+                    "value": "2017gfo"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "kilonova"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
 ```
 
-## Rehype mode
+To render as HTML:
 
-When you use the plugin in Rehype mode, it converts Astro Flavored Markdown nodes into HTML [`<data>`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) elements with `class` and `value` attributes indicating the kind of data and a normalized, computable value.
-
-Here is a basic pipeline for processing in Remark mode:
-
-```mjs
-import { rehypeAstro } from '@nasa-gcn/remark-rehype-astro'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import { unified } from 'unified'
-
-const processor = unified().use(remarkParse).use(remarkRehype).use(rehypeAstro)
 ```
+$ npx remark-rehype-astro-cli --html example.md
 
-The following Markdown text:
-
-```md
-See GCN Circular 123
+<h1>Example</h1>
+<p>Here is a table:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Transient</th>
+      <th>Classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><data class="tns" value="2017gfo">AT2017gfo</data></td>
+      <td>kilonova</td>
+    </tr>
+  </tbody>
+</table>
 ```
-
-is represented by the following HTML:
-
-```html
-<p>See <data class="gcn-circular" value="123">123</data></p>
-```
-
-You can enrich these [`<data>`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) elements using CSS, JavaScript, or by rendering them as custom React components using [rehype-react](https://github.com/rehypejs/rehype-react).
-
-For an example of Astro Flavored Markdown enriched with React components, see the following files:
-
-- https://github.com/nasa-gcn/gcn.nasa.gov/blob/main/app/routes/circulars.%24circularId/Body.tsx
-- https://github.com/nasa-gcn/gcn.nasa.gov/blob/main/app/routes/circulars.%24circularId/AstroData.tsx
-- https://github.com/nasa-gcn/gcn.nasa.gov/blob/main/app/routes/circulars.%24circularId/AstroData.components.tsx
