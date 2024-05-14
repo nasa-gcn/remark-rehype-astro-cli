@@ -1,3 +1,5 @@
+[![NPM Version](https://img.shields.io/npm/v/%40nasa-gcn%2Fafm)](https://www.npmjs.com/package/@nasa-gcn/afm)
+
 # Astro Flavored Markdown
 
 This is a command-line tool to render Astro Flavored Markdown documents to JSON abstract syntax trees or HTML. Astro Flavored Markdown is a dialect of [Markdown](https://www.markdownguide.org) for rapid astronomy communications. Astro Flavored Markdown detects and enriches dates, times, sky coordinates, and bibliographic references in text.
