@@ -39,7 +39,7 @@ Here is a table:
 To render as a JSON syntax tree:
 
 ```
-$ npx afm example.md
+$ npx @nasa-gcn/afm example.md
 {
   "type": "root",
   "children": [
@@ -128,7 +128,7 @@ $ npx afm example.md
 To render as HTML:
 
 ```
-$ npx afm --html example.md
+$ npx @nasa-gcn/afm --html example.md
 
 <h1>Example</h1>
 <p>Here is a table:</p>
