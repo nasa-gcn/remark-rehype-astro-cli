@@ -1,4 +1,4 @@
-# remark-rehype-astro-cli
+# Astro Flavored Markdown
 
 This is a command-line tool to render Astro Flavored Markdown documents to JSON abstract syntax trees or HTML. Astro Flavored Markdown is a dialect of [Markdown](https://www.markdownguide.org) for rapid astronomy communications. Astro Flavored Markdown detects and enriches dates, times, sky coordinates, and bibliographic references in text.
 
@@ -7,7 +7,7 @@ This command-line interface is a thin wrapper around [remark-rehype-astro](https
 ## Usage
 
 ```
-Usage: remark-rehype-astro-cli [options] [input]
+Usage: afm [options] [input]
 
 Render Astro Flavored Markdown as a JSON syntax tree or as HTML
 
@@ -37,7 +37,7 @@ Here is a table:
 To render as a JSON syntax tree:
 
 ```
-$ npx remark-rehype-astro-cli example.md
+$ npx afm example.md
 {
   "type": "root",
   "children": [
@@ -126,7 +126,7 @@ $ npx remark-rehype-astro-cli example.md
 To render as HTML:
 
 ```
-$ npx remark-rehype-astro-cli --html example.md
+$ npx afm --html example.md
 
 <h1>Example</h1>
 <p>Here is a table:</p>
