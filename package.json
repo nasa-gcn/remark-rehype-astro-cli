@@ -42,7 +42,7 @@
     "unist-util-remove-position": "^5.0.0"
   },
   "devDependencies": {
-    "@nasa-gcn/eslint-config-gitignore": "^0.0.1",
+    "@nasa-gcn/eslint-config-gitignore": "^0.0.2",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@tsconfig/node18": "^18.2.4",
     "@types/mdast": "^4.0.0",
